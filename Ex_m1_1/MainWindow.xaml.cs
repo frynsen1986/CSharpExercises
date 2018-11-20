@@ -106,7 +106,7 @@ namespace School
                             st.LastName = sf.lastName.Text;
                             st.DateOfBirth = DateTime.Parse(sf.dateOfBirth.Text);
 
-                            teacher.Students.Add(st);
+                            this.teacher.Students.Add(st);
 
                             saveChanges.IsEnabled = true;   // Enable save changes.
                         }
@@ -152,7 +152,18 @@ namespace School
         public object Convert(object value, Type targetType, object parameter,
                               System.Globalization.CultureInfo culture)
         {
-            return "";
+            String strAge = "";
+
+            if (value != null)
+            {
+                DateTime dtDob = (DateTime)value;
+//                DateTime temp = new DateTime(DateTime.Now.Subtract(dtDob).Ticks);
+//                int intAge = temp.Year - 1;
+                int intAge = new DateTime(DateTime.Now.Subtract(dtDob).Ticks).Year - 1;
+                strAge = intAge.ToString();
+            }
+
+            return strAge;
         }
 
         #region Predefined code
