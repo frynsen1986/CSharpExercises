@@ -113,6 +113,25 @@ namespace School
 
                         break;
                     }
+                case Key.Delete:
+                    {
+                        // Select current student, prompt user using MessageBox and delete if accept.
+                        Student st = ((ListView)sender).SelectedItem as Student;
+
+                        MessageBoxResult deletePrompt = MessageBox.Show(
+                            String.Format("Remove {0} {1} from class {2}?",
+                                st.FirstName, st.LastName, this.teacher.Class),
+                            "Delete student", 
+                            MessageBoxButton.YesNo);
+
+                        if (deletePrompt == MessageBoxResult.Yes)
+                        {
+                            schoolContext.Students.DeleteObject(st);
+                            saveChanges.IsEnabled = true;
+                        }
+
+                        break;
+                    }
             }
         }
 
