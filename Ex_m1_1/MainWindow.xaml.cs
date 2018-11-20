@@ -29,7 +29,8 @@ namespace School
         public MainWindow()
         {
             InitializeComponent();
-            
+            // Playing around with lambda expression :).
+            saveChanges.Click += (s, e) => { MessageBox.Show("Nothing has been implemented yet" + ((RoutedEventArgs)e).GetType().ToString()); };
         }
 
         // Connect to the database and display the list of teachers when the window appears
