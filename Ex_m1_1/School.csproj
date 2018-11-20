@@ -107,6 +107,7 @@
     <None Include="Data\SchoolData.edmx.diagram">
       <DependentUpon>SchoolData.edmx</DependentUpon>
     </None>
+    <None Include="Prerequisite\Databases\SetupSchoolDB.cmd" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -115,6 +116,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Prerequisite\Databases\Prototype\SchoolDB.sql" />
+    <Resource Include="Prerequisite\Databases\ReadMe.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
