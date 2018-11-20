@@ -29,6 +29,7 @@ namespace School
         public MainWindow()
         {
             InitializeComponent();
+            
         }
 
         // Connect to the database and display the list of teachers when the window appears
@@ -50,6 +51,7 @@ namespace School
 
             // Use databinding to display these students
             studentsList.DataContext = this.studentsInfo;
+            studentsList.Focus();
         }
 
         #endregion
@@ -67,40 +69,54 @@ namespace School
             switch (e.Key)
             {
                 case Key.Enter:
-                    //Student st = studentsList.SelectedItem as Student;  // Retrieving the selected item from the studentsList object in the UI, regarless of the sender.
-                    Student st = ((ListView)sender).SelectedItem as Student;   // Retrieving the selected item from the listView sender of the event. Require double cast, which introduce a new possible error.
+                    {    //Student st = studentsList.SelectedItem as Student;  // Retrieving the selected item from the studentsList object in the UI, regarless of the sender.
+                        Student st = ((ListView)sender).SelectedItem as Student;   // Retrieving the selected item from the listView sender of the event. Require double cast, which introduce a new possible error.
 
-                    // Create and populate a new instance of the StudentForm
-                    if (st != null)
-                    {
-                        StudentForm sf = new StudentForm();
-
-                        sf.Title = "Edit Student Details";
-                        sf.firstName.Text = st.FirstName;
-                        sf.lastName.Text = st.LastName;
-                        sf.dateOfBirth.Text = st.DateOfBirth.ToString("d");
-                        if (sf.ShowDialog().Value)  // Detecting if user pressed "OK" on the form.
+                        // Create and populate a new instance of the StudentForm
+                        if (st != null)
                         {
+                            StudentForm sf = new StudentForm();
+
+                            sf.Title = "Edit Student Details";
+                            sf.firstName.Text = st.FirstName;
+                            sf.lastName.Text = st.LastName;
+                            sf.dateOfBirth.Text = st.DateOfBirth.ToString("d");
+                            if (sf.ShowDialog().Value)  // Detecting if user pressed "OK" on the form.
+                            {
+                                st.FirstName = sf.firstName.Text;
+                                st.LastName = sf.lastName.Text;
+                                st.DateOfBirth = DateTime.Parse(sf.dateOfBirth.Text);
+
+                                // Enable the "Save changes"-button on the form.
+                                saveChanges.IsEnabled = true;
+                            }
+                        }
+
+                        break;
+                    }
+                case Key.Insert:
+                    {   // Create new clean StudentForm.
+                        StudentForm sf = new StudentForm();
+                        sf.Title = "New Student for Class " + teacher.Class;
+
+                        if (sf.ShowDialog().Value)  // If pressing OK, add new student to current teacher.
+                        {
+                            Student st = new Student();
                             st.FirstName = sf.firstName.Text;
                             st.LastName = sf.lastName.Text;
                             st.DateOfBirth = DateTime.Parse(sf.dateOfBirth.Text);
 
-                            // Enable the "Save changes"-button on the form.
-                            saveChanges.IsEnabled = true;
+                            teacher.Students.Add(st);
+
+                            saveChanges.IsEnabled = true;   // Enable save changes.
                         }
+
+                        break;
                     }
-
-                    break;
-
             }
         }
 
         #region Predefined code
-
-        private void studentsList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
- 
-        }
 
         // Save changes back to the database and make them permanent
         private void saveChanges_Click(object sender, RoutedEventArgs e)
