@@ -72,67 +72,54 @@ namespace School
                 case Key.Enter:
                     {    //Student st = studentsList.SelectedItem as Student;  // Retrieving the selected item from the studentsList object in the UI, regarless of the sender.
                         Student st = ((ListView)sender).SelectedItem as Student;   // Retrieving the selected item from the listView sender of the event. Require double cast, which introduce a new possible error.
-
-                        // Create and populate a new instance of the StudentForm
-                        if (st != null)
-                        {
-                            StudentForm sf = new StudentForm();
-
-                            sf.Title = "Edit Student Details";
-                            sf.firstName.Text = st.FirstName;
-                            sf.lastName.Text = st.LastName;
-                            sf.dateOfBirth.Text = st.DateOfBirth.ToString("d");
-                            if (sf.ShowDialog().Value)  // Detecting if user pressed "OK" on the form.
-                            {
-                                st.FirstName = sf.firstName.Text;
-                                st.LastName = sf.lastName.Text;
-                                st.DateOfBirth = DateTime.Parse(sf.dateOfBirth.Text);
-
-                                // Enable the "Save changes"-button on the form.
-                                saveChanges.IsEnabled = true;
-                            }
-                        }
-
+                        editStudent(st);
                         break;
                     }
                 case Key.Insert:
                     {   // Create new clean StudentForm.
-                        StudentForm sf = new StudentForm();
-                        sf.Title = "New Student for Class " + teacher.Class;
-
-                        if (sf.ShowDialog().Value)  // If pressing OK, add new student to current teacher.
-                        {
-                            Student st = new Student();
-                            st.FirstName = sf.firstName.Text;
-                            st.LastName = sf.lastName.Text;
-                            st.DateOfBirth = DateTime.Parse(sf.dateOfBirth.Text);
-
-                            this.teacher.Students.Add(st);
-
-                            saveChanges.IsEnabled = true;   // Enable save changes.
-                        }
-
+                        addNewStudent();
                         break;
                     }
                 case Key.Delete:
                     {
                         // Select current student, prompt user using MessageBox and delete if accept.
                         Student st = ((ListView)sender).SelectedItem as Student;
-
-                        MessageBoxResult deletePrompt = MessageBox.Show(
-                            String.Format("Remove {0} {1} from class {2}?",
-                                st.FirstName, st.LastName, this.teacher.Class),
-                            "Delete student", 
-                            MessageBoxButton.YesNo);
-
-                        if (deletePrompt == MessageBoxResult.Yes)
-                        {
-                            schoolContext.Students.DeleteObject(st);
-                            saveChanges.IsEnabled = true;
-                        }
-
+                        removeStudent(st);
                         break;
                     }
+            }
+        }
+
+        private void addNewStudent()
+        {
+            StudentForm sf = new StudentForm();
+            sf.Title = "New Student for Class " + teacher.Class;
+
+            if (sf.ShowDialog().Value)  // If pressing OK, add new student to current teacher.
+            {
+                Student st = new Student();
+                st.FirstName = sf.firstName.Text;
+                st.LastName = sf.lastName.Text;
+                st.DateOfBirth = DateTime.Parse(sf.dateOfBirth.Text);
+
+                this.teacher.Students.Add(st);
+
+                saveChanges.IsEnabled = true;   // Enable save changes.
+            }
+        }
+
+        private void removeStudent(Student st)
+        {
+            MessageBoxResult deletePrompt = MessageBox.Show(
+                                        String.Format("Remove {0} {1} from class {2}?",
+                                            st.FirstName, st.LastName, this.teacher.Class),
+                                        "Delete student",
+                                        MessageBoxButton.YesNo);
+
+            if (deletePrompt == MessageBoxResult.Yes)
+            {
+                schoolContext.Students.DeleteObject(st);
+                saveChanges.IsEnabled = true;
             }
         }
 
@@ -145,7 +132,40 @@ namespace School
         }
 
         #endregion
+
+        private void studentsList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            //Student st = studentsList.SelectedItem as Student;  // Retrieving the selected item from the studentsList object in the UI, regarless of the sender.
+            Student st = ((ListView)sender).SelectedItem as Student;   // Retrieving the selected item from the listView sender of the event. Require double cast, which introduce a new possible error.
+
+            editStudent(st);
+
+        }
+
+        private void editStudent(Student st)
+        {
+            // Create and populate a new instance of the StudentForm
+            if (st != null)
+            {
+                StudentForm sf = new StudentForm();
+
+                sf.Title = "Edit Student Details";
+                sf.firstName.Text = st.FirstName;
+                sf.lastName.Text = st.LastName;
+                sf.dateOfBirth.Text = st.DateOfBirth.ToString("d");
+                if (sf.ShowDialog().Value)  // Detecting if user pressed "OK" on the form.
+                {
+                    st.FirstName = sf.firstName.Text;
+                    st.LastName = sf.lastName.Text;
+                    st.DateOfBirth = DateTime.Parse(sf.dateOfBirth.Text);
+
+                    // Enable the "Save changes"-button on the form.
+                    saveChanges.IsEnabled = true;
+                }
+            }
+        }
     }
+
 
     [ValueConversion(typeof(string), typeof(Decimal))]
     class AgeConverter : IValueConverter
