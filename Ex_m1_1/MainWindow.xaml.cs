@@ -6,6 +6,8 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using School.Data;
+using System.Data;
+using System.Data.Objects;
 
 
 namespace School
@@ -30,7 +32,7 @@ namespace School
         {
             InitializeComponent();
             // Playing around with lambda expression :).
-            saveChanges.Click += (s, e) => { MessageBox.Show("Nothing has been implemented yet" + ((RoutedEventArgs)e).GetType().ToString()); };
+            // saveChanges.Click += (s, e) => { MessageBox.Show("Nothing has been implemented yet" + ((RoutedEventArgs)e).GetType().ToString()); };
         }
 
         // Connect to the database and display the list of teachers when the window appears
@@ -128,7 +130,32 @@ namespace School
         // Save changes back to the database and make them permanent
         private void saveChanges_Click(object sender, RoutedEventArgs e)
         {
+            try
+            {
+                schoolContext.SaveChanges();
+                saveChanges.IsEnabled = false;
 
+            }
+            // Disse exceptions bliver først gennemgået senere, men det er langhåret. Det binder sig til
+            // schoolContext, som er databasen.
+            catch (OptimisticConcurrencyException ex)
+            {
+                // If the user has changed the same students earlier, then overwrite their changes with the new data
+                this.schoolContext.Refresh(RefreshMode.StoreWins, schoolContext.Students);
+                this.schoolContext.SaveChanges();
+            }
+            catch (UpdateException uEx)
+            {
+                MessageBox.Show("Error occured when saving changes:\n" + uEx.InnerException.Message
+                    , "Error saving changes");
+                this.schoolContext.Refresh(RefreshMode.StoreWins, schoolContext.Students);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("An error occured:\n" + ex.InnerException.Message
+                    , "Error saving changes");
+                this.schoolContext.Refresh(RefreshMode.StoreWins, schoolContext.Students);
+            }
         }
 
         #endregion
@@ -180,7 +207,7 @@ namespace School
                 DateTime dtDob = (DateTime)value;
 //                DateTime temp = new DateTime(DateTime.Now.Subtract(dtDob).Ticks);
 //                int intAge = temp.Year - 1;
-                int intAge = new DateTime(DateTime.Now.Subtract(dtDob).Ticks).Year - 1;
+                int intAge = AgeCalculator.CalcAge(dtDob);
                 strAge = intAge.ToString();
             }
 
@@ -197,4 +224,19 @@ namespace School
 
         #endregion
     }
+
+    public static class AgeCalculator
+    {
+        public static int CalcAge(DateTime dtDob)
+        {
+            int age = -1;
+            if (DateTime.Now.CompareTo(dtDob) >= 0)
+            {
+                age = new DateTime(DateTime.Now.Subtract(dtDob).Ticks).Year - 1;
+            }
+
+            return age;
+        }
+    }
+    
 }
