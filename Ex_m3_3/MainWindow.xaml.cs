@@ -77,7 +77,10 @@ namespace GradesPrototype
 
         // TODO: Exercise 3: Task 2a: Handle logon failure
         // Display an error message. The user must try again
-
+        private void Logon_Failed(object sender, EventArgs e)
+        {
+            MessageBox.Show("Incorrect credidentials.");
+        }
 
         // Handle logoff
         private void Logoff_Click(object sender, RoutedEventArgs e)
@@ -115,14 +118,14 @@ namespace GradesPrototype
             {
                 case Role.Student:
                     // TODO: Exercise 3: Task 2c: Display the student name in the banner at the top of the page
-                    
+                    txtName.Text = SessionContext.UserName;
                     // Display the details for the current student
                     GotoStudentProfile();
                     break;
 
                 case Role.Teacher:
                     // TODO: Exercise 3: Task 2d: Display the teacher name in the banner at the top of the page
-                    
+                    txtName.Text = SessionContext.UserName;
                     // Display the list of students for the teacher
                     GotoStudentsPage();                    
                     break;
