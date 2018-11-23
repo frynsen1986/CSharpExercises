@@ -49,8 +49,22 @@ namespace GradesPrototype.Views
         // The MainWindow window subscribes to this event and displays the view for a single student
         private void Student_Click(object sender, RoutedEventArgs e)
         {
-            StudentSelected?.Invoke(sender, new StudentEventArgs((string)((Button)sender).Tag));
-            
+            //StudentSelected?.Invoke(sender, new StudentEventArgs((string)((Button)sender).Tag));
+            //Button itemClicked = sender as Button;
+            //if (itemClicked != null)
+            if (sender is Button itemClicked)   // Cool shorthand i stedet for at caste og checke for null :)
+            {
+                // Find out which student was clicked
+                int studentID = (int)itemClicked.Tag;
+                if (StudentSelected != null)
+                {
+                    // Find the details of the student by examining the DataContext of the Button
+                    Student student = (Student)itemClicked.DataContext;
+
+                    // Raise the StudentSelected event (handled by MainWindow) to display the details for this student
+                    StudentSelected(sender, new StudentEventArgs(student));
+                }
+            }
         }
         #endregion
     }
@@ -58,9 +72,9 @@ namespace GradesPrototype.Views
     // EventArgs class for passing Student information to an event
     public class StudentEventArgs : EventArgs
     {
-        public string Child { get; set; }
+        public Student Child { get; set; }
 
-        public StudentEventArgs(string s)
+        public StudentEventArgs(Student s)
         {
             Child = s;
         }

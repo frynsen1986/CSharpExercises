@@ -11,30 +11,30 @@ namespace GradesPrototype.Data
 
     public struct Grade
     {
-        int StudentID;
-        string AssessmentDate;
-        string SubjectName;
-        string Assessment;
-        string Comments;
+        public int StudentID;
+        public string AssessmentDate;
+        public string SubjectName;
+        public string Assessment;
+        public string Comments;
     }
 
     public struct Student
     {
-        int StudentID;
-        string UserName;
-        string Password;
-        int TeacherID;
-        string FirstName;
-        string LastName;
+        public int StudentID;
+        public string UserName;
+        public string Password;
+        public int TeacherID;
+        public string FirstName;
+        public string LastName;
     }
 
     public struct Teacher
     {
-        int TeacherID;
-        string UserName;
-        string Password;
-        string FirstName;
-        string LastName;
-        string Class;
+        public int TeacherID;
+        public string UserName;
+        public string Password;
+        public string FirstName;
+        public string LastName;
+        public string Class;
     }
 }

@@ -32,6 +32,8 @@ namespace GradesPrototype.Views
         public delegate void MyOwnEventHandler(object sender, EventArgs e);
         public event MyOwnEventHandler LogonSucces;
 
+        public event MyOwnEventHandler LogonFailed;
+
         #endregion
 
         #region Logon Validation
@@ -39,18 +41,52 @@ namespace GradesPrototype.Views
         // Simulate logging on (no validation or authentication performed yet)
         public void Logon_Click(object sender, RoutedEventArgs e)
         {
-            SessionContext.UserName = username.Text;
-            SessionContext.UserRole = userrole.IsChecked.Value ? Role.Teacher : Role.Student;
-            if (userrole.IsChecked.Value == false)
-                SessionContext.CurrentStudent = "Eric Gruber";
+            //bool isTeacherSigningIn = userrole.IsChecked.Value;
 
-            // Raise 
-            //if (LogonSucces != null)    // Check om der er nogen lyttere.
-            //{
-            //    LogonSucces(sender, e);
-            //}
-            // Alternativ invocation:
-            LogonSucces?.Invoke(sender, e); // ? checker om LogonSucces er null (ingen lyttere) før den kalder invoke på alle.
+            //if (isTeacherSigningIn)
+            //{ }
+
+            var teacherQuery =
+                from Teacher teacher in DataSource.Teachers
+                where teacher.UserName == username.Text &&    // User exists
+                      teacher.Password == password.Password   // Password is correct
+                select teacher;
+
+            var studentQuery =
+                from Student student in DataSource.Students
+                where student.UserName == username.Text &&
+                      student.Password == password.Password
+                select student;
+
+            if (teacherQuery.Count() == 1)  // Only if there's exactly one match!
+            {
+                Teacher signedInTeacher = teacherQuery.First();
+
+                // Save current teacher in SessionContext
+                SessionContext.UserName = signedInTeacher.UserName;
+                SessionContext.UserID = signedInTeacher.TeacherID;
+                SessionContext.UserRole = Role.Teacher;
+                SessionContext.CurrentTeacher = signedInTeacher;
+
+                // Raise succes event
+                LogonSucces?.Invoke(sender, e); // ? checker om LogonSucces er null (ingen lyttere) før den kalder invoke på alle.
+                return;
+            }
+            else if (studentQuery.Count() == 1)
+            {
+                Student signedInStudent = studentQuery.First();
+
+                // Save current teacher in SessionContext
+                SessionContext.UserName = signedInStudent.UserName;
+                SessionContext.UserID = signedInStudent.StudentID;
+                SessionContext.UserRole = Role.Student;
+                SessionContext.CurrentStudent = signedInStudent;
+
+                LogonSucces?.Invoke(sender, e); // ? checker om LogonSucces er null (ingen lyttere) før den kalder invoke på alle.
+                return;
+            }
+            
+            LogonFailed?.Invoke(sender, e); // Raise failed event
         }
 
 
