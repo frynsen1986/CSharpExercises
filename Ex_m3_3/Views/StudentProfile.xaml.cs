@@ -54,8 +54,22 @@ namespace GradesPrototype.Views
         public void Refresh()
         {
             // TODO: Exercise 3: Task 4a: Display the details for the current student (held in SessionContext.CurrentStudent) 
+            bool isTeacher = SessionContext.UserRole == Role.Teacher;
+            btnBack.Visibility = isTeacher ? Visibility.Visible : Visibility.Hidden;
+
+            studentName.DataContext = SessionContext.CurrentStudent;
+
 
             // TODO: Exercise 3: Task 4d: Create a list of the grades for the student and display this list on the page
+
+            var query =
+                from Grade grade in DataSource.Grades
+                where grade.StudentID == SessionContext.CurrentStudent.StudentID
+                orderby grade.SubjectName
+                select grade;
+
+            ArrayList grades = new ArrayList(query.ToArray());
+            studentGrades.ItemsSource = grades;
         }
     }
 }
