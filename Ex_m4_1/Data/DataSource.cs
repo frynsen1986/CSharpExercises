@@ -16,11 +16,21 @@ namespace GradesPrototype.Data
         public static ArrayList Teachers;
         public static ArrayList Students;
         public static ArrayList Grades;
+        public static List<string> ValidSubjects;
 
         #region Sample Data
         // Populate the collections with mock data
         public static void CreateData()
         {
+            ValidSubjects = new List<string>()
+            {
+                "Math",
+                "English",
+                "History",
+                "Geography",
+                "Science"
+            };
+
             Teachers = new ArrayList()
             {
                 new Teacher() { TeacherID = 1, UserName = "vallee", Password = "password", FirstName = "Esther", LastName = "Valle", Class = "3C" },

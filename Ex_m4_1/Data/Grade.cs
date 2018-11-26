@@ -15,11 +15,64 @@ namespace GradesPrototype.Data
     // TODO: Exercise 1: Task 1a: Convert Grade into a class and define constructors
     public class Grade
     {
+        #region Properties and fields
+
         public int StudentID { get; set; }
-        public string AssessmentDate { get; set; }
-        public string SubjectName { get; set; }
-        public string Assessment { get; set; }
+
+        private string _assessmentDate;
+        public string AssessmentDate
+        {
+            get => _assessmentDate;
+            set
+            {
+                DateTime input;
+                try
+                {
+                    input = DateTime.Parse(value);
+                }
+                catch (Exception ex)
+                {
+                    throw new ArgumentException("Invalid Date", ex);
+                }
+
+                if (input.CompareTo(DateTime.Now) > 0)
+                    throw new ArgumentOutOfRangeException(
+                        string.Format("Date can not be later than today ({0})", DateTime.Now.ToString()));
+
+                _assessmentDate = input.ToString();
+            }
+        }
+
+        private string _subjectName;
+        public string SubjectName
+        {
+            get => _subjectName;
+            set
+            {
+                if (!DataSource.ValidSubjects.Contains(value))
+                    throw new ArgumentException("Not a valid Subject");
+
+                _subjectName = value;
+            }
+        }
+
+        private string _assessment;
+        public string Assessment
+        {
+            get => _assessment;
+            set
+            {
+                bool isValidGrade = Regex.IsMatch(value, @"[A-E][+-]?$");
+                if (!isValidGrade)
+                    throw new ArgumentOutOfRangeException("Invalid Grade");
+
+                _assessment = value;
+            }
+        }
+
         public string Comments { get; set; }
+
+        #endregion Properties and fields
 
         #region Constructors
         public Grade() : this(0, DateTime.Now.ToString("d"), "A", "Math", "") { }
