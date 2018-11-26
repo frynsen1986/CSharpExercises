@@ -62,7 +62,7 @@ namespace GradesPrototype.Data
             get => _assessment;
             set
             {
-                bool isValidGrade = Regex.IsMatch(value, @"[A-E][+-]?$");
+                bool isValidGrade = Regex.IsMatch(value, @"^[A-E]{1}[+-]?$");
                 if (!isValidGrade)
                     throw new ArgumentOutOfRangeException("Invalid Grade");
 
@@ -75,7 +75,7 @@ namespace GradesPrototype.Data
         #endregion Properties and fields
 
         #region Constructors
-        public Grade() : this(0, DateTime.Now.ToString("d"), "A", "Math", "") { }
+        public Grade() : this(0, DateTime.Now.ToString("d"), "Math", "A", "") { }
 
         public Grade(int studentID, string assessmentDate, string subjectName, string assessment
             , string comments)
