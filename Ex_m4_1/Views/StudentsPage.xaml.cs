@@ -32,6 +32,7 @@ namespace GradesPrototype.Views
         public void Refresh()
         {
             // Find students for the current teacher
+            // This approach require the DataSource.Students to be sorted. Don't know in regards of performance which approach is faster.
             ArrayList students = new ArrayList();
             foreach (Student student in DataSource.Students)
             {
@@ -40,6 +41,15 @@ namespace GradesPrototype.Views
                     students.Add(student);
                 }
             }
+
+            // Alternative way of getting the Students, using LINQ and the buildin "orderby" using the implemented ICompare<Student> in the Student class
+            //var query =
+            //    from Student student in DataSource.Students
+            //    where student.TeacherID == SessionContext.CurrentTeacher.TeacherID
+            //    orderby student
+            //    select student;
+
+            //ArrayList students = new ArrayList(query.ToArray());
 
             // Bind the collection to the list item template
             list.ItemsSource = students;

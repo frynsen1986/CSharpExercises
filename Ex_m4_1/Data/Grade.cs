@@ -91,7 +91,7 @@ namespace GradesPrototype.Data
     }
 
     // TODO: Exercise 1: Task 2a: Convert Student into a class, make the password property write-only, add the VerifyPassword method, and define constructors
-    public class Student
+    public class Student : IComparable<Student>
     {
         #region Properties
         public int StudentID { get; set; }
@@ -124,8 +124,24 @@ namespace GradesPrototype.Data
             return (pwIsCorrect == 0 ? true : false);
 
         }
+
+        
         #endregion Methods
 
+        #region IComparable<> implementation
+        public int CompareTo(Student other)
+        {
+            // Sort by firstname then lastname
+            //string myName = this.FirstName + this.LastName;
+            //string otherName = other.FirstName + other.LastName;
+
+            // Sort by lastname then firstname
+            string myName = this.LastName + this.FirstName;
+            string otherName = other.LastName + other.FirstName;
+
+            return myName.CompareTo(otherName);
+        }
+        #endregion
     }
 
     // TODO: Exercise 1: Task 2b: Convert Teacher into a class, make the password property write-only, add the VerifyPassword method, and define constructors
