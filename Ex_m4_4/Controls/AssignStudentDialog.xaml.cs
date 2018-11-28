@@ -29,7 +29,24 @@ namespace GradesPrototype.Controls
         // TODO: Exercise 4: Task 3b: Refresh the display of unassigned students
         private void Refresh()
         {
-            
+            var unassignedStudentsQuery =
+                from Student stud in DataSource.Students
+                where stud.TeacherID == 0
+                orderby stud
+                select stud;
+
+            if (unassignedStudentsQuery.Count() > 0)
+            {
+                var studentList = new System.Collections.ArrayList(unassignedStudentsQuery.ToArray());
+                txtMessage.Visibility = Visibility.Collapsed;
+                list.ItemsSource = studentList;
+                list.Visibility = Visibility.Visible;
+            }
+            else // no students are unassigned
+            {
+                txtMessage.Visibility = Visibility.Visible;
+                list.Visibility = Visibility.Collapsed;
+            }
         }
 
         private void AssignStudentDialog_Loaded(object sender, RoutedEventArgs e)
@@ -43,11 +60,25 @@ namespace GradesPrototype.Controls
             try
             {
                 Button btn = (Button)sender;
+                Student selectedStudent = (from Student stud in DataSource.Students
+                                           where stud.StudentID == (int)btn.Tag
+                                           select stud).FirstOrDefault();
 
+                MessageBoxResult shouldEnroll = MessageBox.Show(
+                        $"Enroll {selectedStudent.FirstName} {selectedStudent.LastName} in class?"
+                        , "Accept enrollment in class."
+                        , MessageBoxButton.YesNo);
+
+                if (shouldEnroll == MessageBoxResult.Yes)
+                {
+                    SessionContext.CurrentTeacher.EnrollInClass(selectedStudent);
+                }
+
+                Refresh();
             }
             catch (Exception)
             {
-
+                MessageBox.Show("Something happened", "Exception caught!");
                 throw;
             }
         }

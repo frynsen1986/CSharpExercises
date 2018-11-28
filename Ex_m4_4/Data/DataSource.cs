@@ -39,7 +39,7 @@ namespace GradesPrototype.Data
 
             Students = new List<Student>()
             {
-                new Student() { StudentID = 1, UserName = "liuk", Password = "password", TeacherID = 1, FirstName = "Kevin", LastName = "Liu" },
+                new Student() { StudentID = 1, UserName = "liuk", Password = "password", TeacherID = 0, FirstName = "Kevin", LastName = "Liu" },
                 new Student() { StudentID = 2, UserName = "weberm", Password = "password", TeacherID = 1, FirstName = "Martin", LastName = "Weber" },
                 new Student() { StudentID = 3, UserName = "ligeorge", Password = "password", TeacherID = 1, FirstName = "George", LastName = "Li" },
                 new Student() { StudentID = 4, UserName = "millerl", Password = "password", TeacherID = 1, FirstName = "Lisa", LastName = "Miller" },

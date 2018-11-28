@@ -53,13 +53,59 @@ namespace GradesPrototype.Views
         // TODO: Exercise 4: Task 4a: Enable a teacher to remove a student from a class
         private void Remove_Click(object sender, RoutedEventArgs e)
         {
+            if (SessionContext.UserRole == Role.Teacher)
+            {
+                try
+                {
+                    Student selectedStudent = SessionContext.CurrentStudent;
 
+                    if (MessageBox
+                        .Show($"Remove {selectedStudent.FirstName} {selectedStudent.LastName} from class?"
+                            ,"Confirm remove."
+                            , MessageBoxButton.YesNo) 
+                        .Equals(MessageBoxResult.Yes))
+                    {
+                        SessionContext.CurrentTeacher.RemoveFromClass(selectedStudent);
+                        Back?.Invoke(sender, e);    // Going back to the previous page.
+                    }
+                }
+                catch
+                {
+                    MessageBox.Show("Some bad stuff happened, closing application","Exception caught");
+                    throw;
+                }
+            }
         }
 
         // TODO: Exercise 4: Task 5a: Enable a teacher to add a grade to a student
         private void AddGrade_Click(object sender, RoutedEventArgs e)
         {
+            if (SessionContext.UserRole == Role.Teacher)
+            {
+                try
+                {
+                    GradeDialog gd = new GradeDialog();
+                    if( gd.ShowDialog().Value )
+                    {
+                        Grade newGrade = new Grade(
+                            SessionContext.CurrentStudent.StudentID
+                            , gd.assessmentDate.SelectedDate.Value.ToString("d")
+                            , gd.subject.SelectedValue.ToString()
+                            , gd.assessmentGrade.Text
+                            , gd.comments.Text);
+                        
+                        DataSource.Grades.Add(newGrade);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    string message = $"Unable to save grade.\nError: {ex.InnerException}";
+                    MessageBox.Show(message,"Exception caught");
+                }
 
+                Refresh();
+                
+            }
         }
         #endregion
 

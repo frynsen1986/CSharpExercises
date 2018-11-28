@@ -38,6 +38,8 @@ namespace GradesPrototype.Controls
         // If the user clicks OK to save the Grade details, validate the information that the user has provided
         private void ok_Click(object sender, RoutedEventArgs e)
         {
+            assessmentGrade.Text = assessmentGrade.Text.ToUpper();
+
             // Use the validation built into the Grade class to validate the user input
             // Create a Grade object using the details provided, and trap and report any exceptions that are thrown
             try
