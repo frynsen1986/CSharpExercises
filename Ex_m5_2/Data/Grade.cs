@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using GradesPrototype.Services;
 
 namespace GradesPrototype.Data
 {
@@ -16,15 +15,14 @@ namespace GradesPrototype.Data
     {
         public string UserName { get; set; }
 
-        protected string _password = Guid.NewGuid().ToString(); // Generate a random password by default
+        // TODO: Exercise 2: Task 2a: Make _password a protected field rather than private
+        private string _password = Guid.NewGuid().ToString(); // Generate a random password by default
         public string Password
         {
             set
             {
-                if (!SetPassword(value))
-                {
-                    throw new ArgumentException("Password not complex enough", "Password");
-                }
+                // TODO: Exercise 2: Task 1b: Use the SetPassword method to set the password
+                _password = value;
             }
         }
 
@@ -33,9 +31,8 @@ namespace GradesPrototype.Data
             return (String.Compare(pass, _password) == 0);
         }
 
-        // Abstract method for setting the password
-        // Teachers and Students have different password complexity policies
-        public abstract bool SetPassword(string pwd);
+        // TODO: Exercise 2: Task 1a: Define an abstract method for setting the password
+        // Teachers and Students will have different password complexity policies
     }
 
     public class Grade
@@ -170,7 +167,6 @@ namespace GradesPrototype.Data
         {
             StudentID = 0;
             UserName = String.Empty;
-            Password = Guid.NewGuid().ToString();
             FirstName = String.Empty;
             LastName = String.Empty;
             TeacherID = 0;
@@ -205,25 +201,12 @@ namespace GradesPrototype.Data
             }   
         }
 
-        // Set the password for the student
+        // TODO: Exercise 2: Task 2b: Implement SetPassword to set the password for the student
         // The password policy is very simple - the password must be at least 6 characters long, but there are no other restrictions
-        public override bool SetPassword(string pwd)
-        {
-            // If the password provided as the parameter is at least 6 characters long then save it and return true
-            if (pwd.Length >= 6)
-            {
-                _password = pwd;
-                return true;
-            }
-            // If the password is not long enough, then do not save it and return false
-            return false;
-        }
     }
 
     public class Teacher : User
     {
-        // TODO: Exercise 3: Task 2a: Set the maximum class size for any teacher
-
         public int TeacherID { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -245,7 +228,6 @@ namespace GradesPrototype.Data
         {
             TeacherID = 0;
             UserName = String.Empty;
-            Password = Guid.NewGuid().ToString();
             FirstName = String.Empty;
             LastName = String.Empty;
             Class = String.Empty;
@@ -254,16 +236,6 @@ namespace GradesPrototype.Data
         // Enroll a student in the class for this teacher
         public void EnrollInClass(Student student)
         {
-            // Verify that this teacher's class is not already full
-
-            // Determine how many students are currently in the class
-            int numStudents = (from s in DataSource.Students
-                               where s.TeacherID == TeacherID
-                               select s).Count();
-
-            // TODO: Exercise 3: Task 2b: If the class is already full, then another student cannot be enrolled
-            // So throw a ClassFullException and specify the class that is full
-
             // Verify that the student is not already enrolled in another class
             if (student.TeacherID == 0)
             {
@@ -293,21 +265,7 @@ namespace GradesPrototype.Data
             } 
         }
 
-        // Set the password for the teacher
+        // TODO: Exercise 2: Task 2c: Implement SetPassword to set the password for the teacher
         // The password must be at least 8 characters long, and it must contain at least 2 numeric characters
-        public override bool SetPassword(string pwd)
-        {
-            // Use a regular expression to check that the password contains at least two numeric characters
-            Match numericMatch = Regex.Match(pwd, @".*[0-9]+.*[0-9]+.*");
-
-            // If the password provided as the parameter is at least 8 characters long and contains at least two numeric characters then save it and return true
-            if (pwd.Length >= 8 && numericMatch.Success)
-            {
-                _password = pwd;
-                return true;
-            }
-            // If the password is not complex enough, then do not save it and return false
-            return false;
-        }
     }
 }

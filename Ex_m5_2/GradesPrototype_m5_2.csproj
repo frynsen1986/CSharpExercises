@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{A50D146B-8660-44EA-8F35-50B8A7C1E341}</ProjectGuid>
+    <ProjectGuid>{46D8269D-7E3C-4070-8134-6949E1AEBBA3}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>GradesPrototype</RootNamespace>
@@ -66,7 +66,6 @@
       <DependentUpon>StudentDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Data\DataSource.cs" />
-    <Compile Include="Services\ClassFullException.cs" />
     <Compile Include="Services\SessionContext.cs" />
     <Compile Include="Views\LogonPage.xaml.cs">
       <DependentUpon>LogonPage.xaml</DependentUpon>
