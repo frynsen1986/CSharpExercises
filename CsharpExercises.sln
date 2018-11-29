@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GradesPrototype_m4_4", "Ex_
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GradesPrototype_m5_1", "Ex_m5_1\GradesPrototype_m5_1.csproj", "{6E112191-D51A-47E0-BB9D-0A63A7821445}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GradesPrototype_m5_2", "Ex_m5_2\GradesPrototype_m5_2.csproj", "{A50D146B-8660-44EA-8F35-50B8A7C1E341}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,6 +59,10 @@ Global
 		{6E112191-D51A-47E0-BB9D-0A63A7821445}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6E112191-D51A-47E0-BB9D-0A63A7821445}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6E112191-D51A-47E0-BB9D-0A63A7821445}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A50D146B-8660-44EA-8F35-50B8A7C1E341}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A50D146B-8660-44EA-8F35-50B8A7C1E341}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A50D146B-8660-44EA-8F35-50B8A7C1E341}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A50D146B-8660-44EA-8F35-50B8A7C1E341}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
