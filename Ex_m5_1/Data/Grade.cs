@@ -16,9 +16,9 @@ namespace GradesPrototype.Data
     // TODO: Exercise 1: Task 1d: Add the VerifyPassword method to the User class
     public abstract class User
     {
-        protected string UserName { get; set; }
+        public string UserName { get; set; }
 
-        private string _password = Guid.NewGuid().ToString(); // Generate a random password by default
+        protected string _password = Guid.NewGuid().ToString(); // Generate a random password by default
         public string Password
         {
             set
